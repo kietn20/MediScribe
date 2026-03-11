@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mediscribe-postgres
+    environment:
+      POSTGRES_DB: mediscribe
+      POSTGRES_USER: mediscribe
+      POSTGRES_PASSWORD: mediscribe_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mediscribe -d mediscribe"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: mediscribe_postgres_data
